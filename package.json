@@ -1,0 +1,47 @@
+{
+  "name": "pi-learning-workflow",
+  "version": "0.1.0",
+  "description": "A file-backed, learner-owned coding-learning workflow for Pi and Agent Skills-compatible agents.",
+  "license": "MIT",
+  "author": "Sina Bastani",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sina96/pi-learning-workflow.git"
+  },
+  "homepage": "https://github.com/sina96/pi-learning-workflow#readme",
+  "keywords": [
+    "pi-package",
+    "agent-skill",
+    "learning-workflow",
+    "coding-education"
+  ],
+  "files": [
+    "AGENTS.md",
+    "LICENSE",
+    "README.md",
+    "VALIDATION.md",
+    "prompts/",
+    "skills/"
+  ],
+  "pi": {
+    "skills": [
+      "./skills/pi-learning-workflow/SKILL.md"
+    ],
+    "prompts": [
+      "./prompts/new-learning-project.md",
+      "./prompts/add-new-learning-task.md",
+      "./prompts/give-learning-hint.md",
+      "./prompts/verify-learning-step.md",
+      "./prompts/archive-learning-task.md",
+      "./prompts/gitignore-learning-docs.md"
+    ]
+  },
+  "scripts": {
+    "check": "node tests/validate.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@11.22.0"
+}
