@@ -98,6 +98,10 @@ assert.match(
 const readme = await readFile(path.join(root, "README.md"), "utf8");
 assert.match(readme, /^# pi-learning-workflow\n\n\[!\[CI\]/);
 assert.match(readme, /actions\/workflows\/ci\.yml\/badge\.svg/);
+assert.match(readme, /img\.shields\.io\/npm\/v\/pi-learning-workflow/);
+assert.match(readme, /npmjs\.com\/package\/pi-learning-workflow/);
+assert.match(readme, /pi install npm:pi-learning-workflow/);
+assert.doesNotMatch(readme, /^## Publishing$/m);
 const ci = await readFile(path.join(root, ".github/workflows/ci.yml"), "utf8");
 assert.match(ci, /actions\/checkout@v6/);
 assert.match(ci, /actions\/setup-node@v6/);

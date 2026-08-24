@@ -1,6 +1,7 @@
 # pi-learning-workflow
 
 [![CI](https://github.com/sina96/pi-learning-workflow/actions/workflows/ci.yml/badge.svg)](https://github.com/sina96/pi-learning-workflow/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/pi-learning-workflow?logo=npm)](https://www.npmjs.com/package/pi-learning-workflow)
 
 `pi-learning-workflow` is a reusable Pi package for hands-on coding-learning projects. It keeps one substantial task, progress, hints, verification evidence, and archives in version-controlled project files. The learner writes implementation; agents explain, review, diagnose, hint, verify, and maintain workflow documents unless explicitly asked to change code.
 
@@ -34,9 +35,15 @@ The non-Markdown `.gitkeep` preserves an empty `docs/done/` in Git.
 
 ## Install
 
-Review the package first: Pi packages and skills are trusted instructions with access through the agent's tools.
+The package is [published on npm](https://www.npmjs.com/package/pi-learning-workflow) and can be installed directly with Pi:
 
 ```bash
+# npm package, global Pi settings
+pi install npm:pi-learning-workflow
+
+# npm package, project-local Pi settings
+pi install -l npm:pi-learning-workflow
+
 # Local path, global Pi settings
 pi install /absolute/path/to/pi-learning-workflow
 
@@ -141,40 +148,6 @@ Pi package installation, the explicit `pi` manifest, and slash prompt templates 
 
 Generated `AGENTS.md` and ordinary Markdown workflow files remain partially portable to agents that understand those files. No workflow can technically guarantee model compliance, safe shell behavior, or idempotency by itself; review proposed changes and keep version-control checkpoints.
 
-## Publishing
-
-Publishing is handled by `.github/workflows/publish.yml` on tags matching `v*`. The workflow requires the tag to exactly equal `v` plus the `package.json` version, requires the tagged commit to be on `main`, rejects already-published versions, runs all package checks on Node.js 24, and publishes stable versions under `latest` or prereleases under `next`.
-
-The npm account is [`sinaba96`](https://www.npmjs.com/~sinaba96), while the GitHub repository owner is `sina96`.
-
-For the first publish, create a granular npm access token with permission to publish `pi-learning-workflow` and add it as the GitHub Actions repository secret `NPM_TOKEN`. After the package exists on npm, configure an npm trusted publisher with:
-
-- **GitHub owner:** `sina96`
-- **Repository:** `pi-learning-workflow`
-- **Workflow:** `publish.yml`
-- **Environment:** leave blank
-
-Then delete `NPM_TOKEN`; subsequent runs use GitHub OIDC trusted publishing automatically. Release a version only after its workflow is on `main`:
-
-```bash
-# First update package.json to the intended version and merge it to main.
-VERSION=$(node -p "require('./package.json').version")
-git tag "v$VERSION"
-git push origin "v$VERSION"
-```
-
-Never reuse or move a release tag. npm package versions are immutable.
-
-## Development and validation
-
-```bash
-pnpm check
-pnpm test
-pnpm pack --dry-run
-```
-
-See [`VALIDATION.md`](VALIDATION.md) for validation scope and remaining interactive-agent assumptions.
-
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) and made with love.
