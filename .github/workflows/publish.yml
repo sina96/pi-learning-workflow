@@ -1,0 +1,107 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: npm-publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Check out tagged commit
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 11.22.0
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Validate release tag
+        id: release
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main || {
+            echo "Release tag must point to a commit on origin/main." >&2
+            exit 1
+          }
+
+          node scripts/validate-release.mjs
+
+      - name: Ensure version is not already published
+        env:
+          PACKAGE_NAME: ${{ steps.release.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          node <<'NODE'
+          (async () => {
+            const name = process.env.PACKAGE_NAME;
+            const version = process.env.PACKAGE_VERSION;
+            const url = `https://registry.npmjs.org/${encodeURIComponent(name)}/${encodeURIComponent(version)}`;
+            const response = await fetch(url, { headers: { accept: "application/json" } });
+
+            if (response.status === 200) throw new Error(`${name}@${version} is already published`);
+            if (response.status !== 404) {
+              throw new Error(`Could not verify npm availability: ${response.status} ${response.statusText}`);
+            }
+            console.log(`${name}@${version} is not yet published.`);
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate package
+        run: pnpm check
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Check package contents
+        run: pnpm pack --dry-run
+
+      # NPM_TOKEN supports the first publish, before an npm trusted publisher can
+      # be configured. Once trusted publishing is configured, remove the secret
+      # and this OIDC step is used automatically.
+      - name: Publish with npm trusted publishing
+        if: env.NPM_TOKEN == ''
+        env:
+          DIST_TAG: ${{ steps.release.outputs.dist_tag }}
+        run: pnpm dlx npm@11.19.0 publish --access public --tag "$DIST_TAG"
+
+      - name: Publish with bootstrap token
+        if: env.NPM_TOKEN != ''
+        env:
+          DIST_TAG: ${{ steps.release.outputs.dist_tag }}
+          NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}
+        run: |
+          npmrc="$RUNNER_TEMP/npmrc"
+          trap 'rm -f "$npmrc"' EXIT
+          printf '//registry.npmjs.org/:_authToken=%s\n' "$NODE_AUTH_TOKEN" > "$npmrc"
+          chmod 600 "$npmrc"
+          NPM_CONFIG_USERCONFIG="$npmrc" pnpm dlx npm@11.19.0 publish --access public --tag "$DIST_TAG" --provenance
