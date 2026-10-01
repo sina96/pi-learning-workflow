@@ -1,88 +1,73 @@
-# Workflow Operations
+# Workflow operations
 
-Load this reference for an explicit workflow command. Apply all safety invariants in `../SKILL.md`.
+Follow the permission boundaries and low-friction principles in `../SKILL.md`. Slash commands are conveniences; equivalent natural-language requests work.
+
+## General behavior
+
+- Do not perform automatic startup recaps, inspection, checks, or tracker writes. When the learner asks to resume, read `.learning/index.md` and the focused issue, then give a concise recap. Label saved statements as recorded; inspect implementation only when requested or needed for the asked work, and label fresh observations separately.
+- Ordinary hints, explanations, walkthroughs, and discussion do not change files. Match the requested help depth. If unclear, ask whether they want a hint, explanation, or walkthrough. Teaching never grants code-edit permission.
+- Save only meaningful milestones, blockers, and decisions. Preserve provenance: learner-reported is not agent-observed or verified. Do not turn conversations into a transcript or save every hint.
+- Use a few light milestones and concepts. Do not prescribe the learner's implementation approach unless requested.
+- Preserve unrelated instructions, user content, legacy files, and unfinished work. Never silently overwrite or delete.
 
 ## Initialize a project
 
-1. Inspect the target directory, including hidden files, Git state, an existing workflow, `AGENTS.md`, and legacy files.
-2. Use supplied arguments for language, topic, project, constraints, and desired outcomes. Ask focused questions only for essential missing information.
-3. If workflow paths already exist, do not overwrite them. Report what exists and offer a merge/repair plan.
-4. If any legacy file exists, stop before scaffolding or migration. Show the exact detected files, a proposed source-to-destination mapping, conflict handling, and how exact requirements and originals will be preserved; ask for approval of that plan. A command invocation alone is not migration approval.
-5. Only when there is no existing/legacy conflict, or after the user explicitly approves a safe plan, create only:
-   - `AGENTS.md`
-   - `docs/current_task.md`
-   - `docs/progress.md`
-   - `docs/hints.md`
-   - `docs/verify.md`
-   - `docs/manifesto.md`
-   - `docs/done/.gitkeep`
-6. Use `references/project-templates.md`, adapting content to known project details. If enough task detail exists, create a substantial active task; otherwise use the explicit no-active-task state and do not invent requirements.
-7. Do not generate exercise implementation. Re-read created files and summarize exact results and declined overwrites.
+1. Inspect the root and hidden paths, `AGENTS.md`, Git state, existing `.learning/` state, and likely legacy workflow documents. This inspection is part of an explicit initialization request, not automatic startup behavior.
+2. If no current or legacy workflow exists, ask only essential questions. Create the minimal tracker from `project-templates.md`; an initial issue is optional. Do not invent a goal or task.
+3. If any learning workflow exists, do not scaffold a competing tracker. Explain current state and offer an inspect/propose/approve migration. Initialization or package installation alone is not migration approval.
+4. Re-read what was created and summarize only meaningful changes and the next action.
 
-Never create `EXERCISE.md`, `MISSION.md`, or root-level workflow-document copies.
+## Capture or start an issue
 
-## Add a new task
+Interpret intent:
 
-1. Read the workflow and inspect whether `docs/current_task.md` has a real active task rather than the explicit empty state.
-2. If none exists, gather essential task information, write one coherent task using the task template, initialize current status in `docs/progress.md`, and add task-specific verification or hint sections only when useful. Do not write implementation.
-3. If one exists, do not overwrite it. Evaluate implementation-complete and verified separately; summarize both states and explain the one-active-task rule.
-4. If complete and verified, an explicit request to add the new task permits safe archival of the current task as the prerequisite, but first summarize the evidence and clarify ambiguity if any. Archive, verify that archival succeeded, then create the new task.
-5. If incomplete, failed, unverified, or ambiguous, recommend finishing or verifying first, then always end the response with one focused question that explicitly asks whether to archive it anyway with the exact applicable status and then create the requested task. A recommendation alone is insufficient. Do nothing until informed confirmation.
-6. After confirmed early archival, preserve all outstanding work and evidence, label status accurately, record user authorization, and create the new task only after archival succeeds.
+- “Save this idea,” “add to backlog,” or equivalent: create a concise backlog issue using the learner's wording. Do not demand criteria, choose focus, or alter current focus.
+- “Let's work on/start this”: clarify essential outcome, acceptance criteria, learning focus, and a few light milestones before marking it active. Define safe checks where known; do not invent commands.
+- If the learner's intent is ambiguous between capture and start, ask one focused question.
 
-A request to divide work creates milestones in the same `docs/current_task.md`, never multiple active task files.
+Inspect index and issue files before allocating the next unused `Tnnn`; never overwrite. Update index links without copying issue details into it.
 
-## Give a hint
+When another issue is focused and unfinished, ask whether to pause it and switch focus, or queue this issue and keep the current focus. Do not change focus until the learner chooses. Preserve its notes/evidence. Creating a backlog item never requires switching or closing another issue.
 
-1. Read active task, progress, relevant existing hints, and relevant learner code.
-2. Identify the current milestone and likely blocker. If ambiguous, ask a focused question.
-3. Give the smallest useful milestone-specific hint: a concept, diagnostic question, reference, debugging strategy, or pseudocode. Avoid future milestones.
-4. Honor an optional requested strength, escalating progressively. Finished implementation still requires an explicit code request.
-5. Find the milestone's existing section in `docs/hints.md`. Refine it or append only novel guidance; do not duplicate the section or destroy useful prior hints.
-6. Report what guidance changed.
+Keep one current focus. Statuses are `backlog`, `ready`, `active`, `paused`, `blocked`, `done`, and `cancelled`. Use `active` for the focused issue; a blocked focused issue may remain focus with `blocked` status. A switch marks the former issue `paused` unless the learner chooses otherwise. Never treat status changes as evidence of completion.
 
-## Verify a step
+## Help the learner
 
-1. Read active task, progress, verification plan, relevant hints, and learner implementation.
-2. Resolve the current milestone unless arguments name another milestone or request whole-task verification.
-3. Select only relevant, safe checks from `docs/verify.md`; use isolated data and avoid destructive/external effects unless explicitly approved.
-4. Snapshot or inspect implementation state as needed. Run checks without editing source, tests, configuration, formatting, dependencies, or generated code.
-5. Inspect exit status plus meaningful stdout and stderr. Report `passed`, `failed`, `partial`, or `blocked` with commands and evidence.
-6. Add one dated, non-duplicative verification-history entry to `docs/progress.md`, update milestone status only to the extent proved, and name the smallest next action.
-7. Do not fix failures or archive automatically.
+Respond to the request without modifying tracker files unless meaningful state changed or the learner asked to save something.
 
-## Ignore learning documents in Git
+- Hint: smallest useful pointer, question, concept, reference, or diagnostic.
+- Explanation: explain the relevant concept and apply it to observed code where appropriate.
+- Walkthrough: provide detailed ordered reasoning/examples when requested; do not silently implement them.
+- Review/debug: inspect only relevant code. Separate observations from suggestions.
 
-1. Confirm the current directory is inside a non-bare Git working tree with `git rev-parse --is-inside-work-tree` and resolve its root with `git rev-parse --show-toplevel`. If either check fails or does not return `true`, make no changes.
-2. Target only `.gitignore` at that repository root, even when the command is invoked from a nested directory. Inspect it first if it exists; never replace its existing content.
-3. Ensure these root-anchored entries are present exactly once:
+If progress, a blocker, or a decision is explicitly established, update only the concise current note/status needed. Distinguish “learner reports” from inspected facts. Do not automatically save transient attempts or hint text.
 
-   ```gitignore
-   # pi-learning-workflow
-   /AGENTS.md
-   /docs/current_task.md
-   /docs/progress.md
-   /docs/hints.md
-   /docs/verify.md
-   /docs/manifesto.md
-   /docs/done/
-   ```
+## Verify work
 
-4. If every path entry is already present, leave `.gitignore` byte-for-byte unchanged; the marker comment alone is not required. Otherwise append only missing path entries. Add the marker only when appending entries and only if that exact marker does not already exist. Preserve existing ordering, comments, line endings where practical, and finish with a newline without introducing duplicate blank blocks.
-5. Re-read `.gitignore` and, when useful, use `git check-ignore -v --no-index` to confirm the patterns. Do not alter generated learning documents, Git configuration, the index, or tracked state; in particular, do not run `git add` or remove already tracked files from the index.
-6. Report whether `.gitignore` was created, updated, already sufficient, or skipped because the directory was not a Git worktree, including the repository-root path and entries added.
+1. Read the index, relevant issue, and relevant verification instructions/code. Verify the requested scope; default to current milestone, not whole issue.
+2. Choose safe, relevant checks. Do not edit implementation, tests, configuration, formatting, dependencies, or generated implementation. Use isolated data when appropriate.
+3. Inspect exit status and meaningful output; report `passed`, `failed`, `partial`, or `blocked`, exact checks, evidence, limitations, and smallest next action.
+4. Record evidence in the relevant issue, preserving distinct criterion evidence and accurately labelling its worktree/revision applicability. Do not add a chronological log for every attempt.
+5. Never infer untested acceptance criteria from a passing build. Verification records evidence but does not close the issue. If all agreed criteria appear supported, ask whether the learner wants to mark it done. If incomplete, failed, partial, or blocked, explain the gap and leave it open unless learner explicitly requests a qualified closure.
+6. Never fix failures unless separately asked for implementation changes.
 
-Repeated invocation must be idempotent. Existing tracked workflow files remain tracked until the user explicitly removes them from the index; this command only changes ignore rules.
+## Meaningful progress and closure
 
-## Archive a task
+When a meaningful milestone, blocker, or decision is established, update the issue and any necessary status/index pointer once. A milestone the learner reports is labelled reported; never check it off as verified without evidence. Keep resume notes short and current, replacing stale notes rather than appending history.
 
-1. Read task, progress, verify plan, relevant implementation, and recorded/current evidence.
-2. Establish implementation-complete and verified independently. State the evidence for each.
-3. The command invocation is an explicit archive request when the active task and state are clear.
-4. If both states are established, derive a sanitized lowercase hyphenated slug (or sanitize the optional custom slug), choose today's unique archive path, preserve the full task plus archive metadata and relevant decisions/blockers/verification outcome, then write it without overwriting.
-5. Only after confirming the archive exists and is complete, replace `docs/current_task.md` with the explicit empty state and add archive history to `docs/progress.md`.
-6. If either state is missing, failed, or ambiguous, explain the exact gap, offer `/verify-learning-step`, and ask whether to archive anyway. The question must say the archive will be labeled incomplete, unverified, failed verification, or the applicable combination. Do not proceed on a generic archive/add-task request alone.
-7. After informed confirmation, follow the same preservation flow, including blockers, unfinished milestones, failed checks, smallest next action, and the fact/date of user-authorized early archival.
-8. Never delete history, automatically create another task, or equate archival with completion.
+Closing is an explicit learner decision. On confirmation, mark `done` and preserve qualification if some criteria were not verified. Cancellation or agreed scope reduction is recorded distinctly; do not call it verified completion. No archive is required to create or start another issue.
 
-Filename uniqueness is deterministic: try `YYYY-MM-DD-slug.md`, then `YYYY-MM-DD-slug-2.md`, `-3.md`, and upward. If archival or verification of the archive fails, leave the active task in place and do not create a replacement task.
+## Optional archive command
+
+Archiving is housekeeping only, never a task lifecycle prerequisite and never a substitute for closure. If requested, preserve the issue in a unique dated history path only after showing the destination and confirming whether the user wants a move or copy. Prefer leaving issue files in place and marking status when this is sufficient. Do not delete originals or automatically archive completed issues.
+
+## Ignore generated tracker files
+
+1. Confirm `git rev-parse --is-inside-work-tree` is `true`; get root with `git rev-parse --show-toplevel`. Otherwise make no changes.
+2. Inspect only root `.gitignore`. Offer root-anchored entries for `/AGENTS.md` only if it is generated/owned by this workflow, and `/.learning/`. Never ignore or overwrite unrelated content. Preserve an existing deliberate version-control choice; ask if ambiguous.
+3. Append only missing rules, idempotently. Do not remove tracked files from the index or run `git add`.
+4. Re-read and report added entries. Explain ignore rules do not untrack existing files.
+
+## Migrate a legacy workflow
+
+Read `migration.md` and follow its inspect → propose → approve → stage → validate → activate procedure. Never migrate automatically at startup. Keep original files and preserve unrelated project instructions. A generic install/init request does not authorize migration.

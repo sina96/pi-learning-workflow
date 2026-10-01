@@ -1,188 +1,107 @@
-# Generated Project Templates
+# Project templates
 
-Adapt bracketed content to known project facts. Do not leave vague placeholders when sufficient information was supplied. Preserve any existing files instead of applying these templates over them.
+Keep the tracker small. Adapt only sections needed for this project; do not generate empty boilerplate. Inspect before writing and preserve existing project instructions.
 
-## `AGENTS.md`
+## `AGENTS.md` addition
+
+Add this section without replacing unrelated instructions:
 
 ```markdown
-# Learning Project Instructions
+## Learning workflow
 
-Before helping, read `docs/current_task.md`, `docs/progress.md`, `docs/verify.md`, relevant portions of `docs/hints.md`, and `docs/manifesto.md` when workflow decisions are involved.
+The learner owns implementation. Do not edit source, tests, configuration, dependencies, formatting, or generated implementation unless explicitly asked. Offer hints, explanations, walkthroughs, review, and verification on request. A request for detailed teaching is not permission to implement.
 
-- Treat `docs/current_task.md` as the source of truth for scope. Keep all milestones of one coherent task in that file.
-- The learner writes implementation code. Make no source, test, configuration, formatting, dependency, or generated-code changes unless the user explicitly requests them.
-- Prefer explanations, reviews, diagnostics, incremental hints, and pseudocode. Do not provide a complete solution when a smaller hint is sufficient.
-- Verify only the current milestone unless broader verification is requested. Do not change implementation during verification.
-- After completed verification, update `docs/progress.md` with accurate commands, results, and evidence.
-- Modify or archive the current task only with explicit user direction. Never silently overwrite workflow files.
-- Treat implementation completion, verification, and archival as separate states. Never describe an incomplete or unverified archive as completed.
+The learning tracker lives in `.learning/index.md`. Do not recap, inspect, run checks, or update it automatically when starting a session. When asked to resume, recap recorded state and distinguish it from fresh inspection. Read only the index, relevant issue, and requested/relevant project files.
 
-## Project-specific additions
+Capture ideas without changing focus. Clarify scope, learning focus, and acceptance criteria before starting an issue. Ask before switching from unfinished focused work: pause it and switch, or queue the new issue and keep focus. Save only meaningful milestones, blockers, and decisions; label learner-reported progress separately from agent-verified evidence.
 
-[Language/tooling, safe test commands, CI constraints, generated artifacts, and other project-specific rules.]
+Verification does not edit implementation. Record evidence and limitations; ask before closing an issue. Keep one current focus and preserve unfinished work.
 ```
 
-## `docs/current_task.md` — no active task
+## `.learning/index.md`
 
 ```markdown
-# Current Learning Task
+# Learning tracker
 
-**State:** No active task.
+Schema: 1
+Focus: none
 
-Use `/add-new-learning-task [goal, language, requirements, or constraints]` to define one coherent substantial task. The learner owns and writes all implementation code unless they explicitly request a code change.
+## Goals
+
+## Issues
+
+## Legacy references
+
 ```
 
-## `docs/current_task.md` — active task
+List IDs, short titles, and relative links only. Do not duplicate issue status or evidence here; each issue file remains its status authority. Goal documents are optional; a standalone issue does not require one.
+
+Issue files live at `.learning/issues/Tnnn.md`; optional goals live at `.learning/goals/Gnnn.md`. Link them from the index with relative paths, for example `- [T001 — Example](issues/T001.md)`.
+
+## Captured issue
 
 ```markdown
-# Current Learning Task: [Specific title]
+# T001 — [Short title]
 
-**State:** Active
-**Implementation owner:** The learner writes implementation code. Agents explain, review, diagnose, hint, and verify unless explicitly asked to change code.
+Status: backlog
 
-## Goal and learning outcomes
+Original idea: [Keep the learner's wording concise and faithful.]
+```
 
-[Concrete goal and concepts the learner should practice.]
+Create IDs by inspecting existing issue filenames and choosing the next unused `Tnnn`. Never overwrite. Do not infer acceptance criteria, focus, or priority while merely capturing an idea.
 
-## Context
+## Started issue
 
-[Existing project state and motivation.]
+```markdown
+# T001 — [Short title]
 
-## Functional requirements
+Status: active
+Goal: [G001 or none]
 
-- [Observable required behavior.]
-
-## Non-functional requirements
-
-- [Quality, safety, performance, compatibility, or maintainability requirement.]
-
-## Constraints
-
-- [Tools, boundaries, prohibited shortcuts, and learner-ownership constraints.]
+## Outcome
+[Observable result, agreed with learner.]
 
 ## Acceptance criteria
+- [ ] [Observable behavior or evidence.]
 
-- [ ] [Evidence-based criterion.]
+## Learning focus
+[Concepts the learner wants to practice.]
 
 ## Milestones
+- [ ] [A few bounded outcomes; avoid prescribing implementation steps.]
 
-1. **[Milestone]** — [bounded outcome]
-2. **[Milestone]** — [bounded outcome]
+## Checks
+- [Safe, relevant command or inspection; define only what is known.]
 
-## Relevant commands and interfaces
+## Current note
+[Optional concise blocker, decision, or smallest resume action.]
 
-- `[safe command or interface]` — [purpose]
-
-## Optional extensions
-
-These are not required for task completion.
-
-- [Clearly optional work.]
+## Latest evidence
+Not verified.
 ```
 
-## `docs/progress.md`
+Include only useful sections. Keep the ordinary active issue concise, roughly one screen where practical. A captured issue becomes a started issue only after clarifying essential scope, learning focus, and acceptance criteria. Preserve the original idea.
+
+## Goal document (optional)
 
 ```markdown
-# Learning Progress
+# G001 — [Outcome]
 
-## Current state
-
-- **Task:** [Title or none]
-- **Milestone:** [Current milestone or none]
-- **Status:** [not started | in progress | blocked | implementation-complete | verification failed | verified]
-- **Smallest next action:** [One concrete learner action]
-
-## Completed milestones
-
-- None.
-
-## Decisions and blockers
-
-- None.
-
-## Learning notes
-
-- None.
-
-## Verification history
-
-- None. A result belongs here only after checks actually run or evidence is inspected.
-
-## Archive history
-
-- None. Record archive path, date, completion state, verification state, and informed early-archive authorization when applicable.
+Outcome: [Larger result]
+Boundaries: [What is and is not included]
+Issues: [Relative links]
 ```
 
-## `docs/hints.md`
+## Evidence entry
+
+Replace or refine the latest evidence for the same criterion/check; retain evidence for distinct criteria. Avoid an attempt-by-attempt journal.
 
 ```markdown
-# Learning Hints
-
-Hints are organized by milestone and strengthened incrementally. They favor concepts, guiding questions, pseudocode, references, and debugging strategies over finished implementation code.
-
-## Current milestone
-
-No hints recorded. Before adding guidance, inspect the learner's relevant code and avoid duplicating an existing milestone section.
+- [criterion/check]: **passed | failed | partial | blocked** — [date; command or inspection; concise evidence and limitations; revision/worktree context when useful]
 ```
 
-## `docs/verify.md`
+A user report is not agent verification. A passing build supports only what that build establishes. If code changes after verification, retain the historical evidence but identify that it may not apply to the current worktree. `done` requires learner confirmation and must not imply unverified criteria passed. Cancellation/reduced scope is not verified completion.
 
-```markdown
-# Verification Plan
+## Legacy migration manifest
 
-Verification does not modify learner implementation. Verify the current milestone only unless the user requests a named milestone or whole-task verification.
-
-For every check:
-
-1. use temporary or isolated data where applicable;
-2. record the exact command or inspection;
-3. inspect exit status and relevant stdout/stderr;
-4. report `passed`, `failed`, `partial`, or `blocked` with evidence;
-5. record completed results in `docs/progress.md`;
-6. give the smallest next action without silently fixing failures.
-
-## Current milestone checks
-
-- [Project-specific reproducible check, or state that it must be defined with the task.]
-
-## Whole-task checks
-
-- Confirm every required acceptance criterion against implementation and evidence.
-- Run the applicable safe project test/lint/build commands defined for this project.
-- Confirm the result is recorded separately from implementation-complete status.
-```
-
-## `docs/manifesto.md`
-
-```markdown
-# Learning Workflow Manifesto
-
-- Keep one coherent active task and define requirements and “done” before implementation.
-- Divide large work into milestones without fragmenting its goal; work on one milestone at a time.
-- Ask for incremental hints before complete solutions, and retain learner ownership of implementation.
-- Record meaningful decisions, blockers, and concise learning notes.
-- Verify before marking a milestone complete; distinguish evidence from assumptions.
-- Treat implementation completion, verification, and archival as separate states.
-- Archive completed tasks only after verification and an explicit archive request.
-- Require informed confirmation before archiving incomplete, failed, or unverified work, and label it accurately.
-- Keep project files—not chat history—as the source of truth.
-- Use version control and small checkpoints.
-- Revise task scope deliberately; never allow silent scope drift.
-```
-
-## Archive metadata block
-
-Prepend this to the preserved task content:
-
-```markdown
-# Archived Learning Task: [Title]
-
-- **Archived on:** YYYY-MM-DD
-- **Final implementation status:** [complete | incomplete | ambiguous]
-- **Final verification status:** [verified | unverified | failed | partial | blocked]
-- **Archive reason/note:** [Concise note]
-- **Early archival explicitly authorized:** [no | yes — preserve the user's informed decision]
-- **Smallest suggested next action:** [Action or none]
-```
-
-After confirmed archival, use the no-active-task template for `docs/current_task.md`. Keep `docs/done/.gitkeep` as a non-Markdown placeholder; archived Markdown files may coexist with it.
+During an approved migration, add a concise `## Legacy references` entry to the index listing original files, their retained role, migration date, and any unresolved status/scope conflicts. Do not rename, rewrite, delete, or mark legacy sources as migrated until targets are reviewed and validated. Preserve originals byte-for-byte; keep the manifest and rollback instructions available. Never silently create new tracker files alongside a legacy workflow without first proposing and obtaining approval for migration.

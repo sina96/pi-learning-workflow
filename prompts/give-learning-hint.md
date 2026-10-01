@@ -1,9 +1,9 @@
 ---
-description: Give and record the smallest useful hint for the learner's current milestone
-argument-hint: "[blocker or desired hint strength]"
+description: Give on-demand learning help at the requested depth without taking over implementation
+argument-hint: "[blocker; hint, explanation, or walkthrough]"
 ---
-Load and follow the `pi-learning-workflow` skill, especially its **Give a hint** procedure.
+Load and follow the `pi-learning-workflow` skill, especially **Help the learner**.
 
-Read the active workflow, inspect relevant learner code, identify the current milestone and blocker, and provide the smallest useful milestone-specific hint. Prefer concepts, guiding questions, references, debugging strategies, and pseudocode. Avoid future milestones and finished implementation code unless the user explicitly requests code. Refine `docs/hints.md` without duplicate sections or loss of useful guidance.
+Honor the depth implied by the request: hint, explanation, or detailed walkthrough. If unclear, ask which. Inspect only relevant code when needed. Keep implementation learner-owned unless explicitly asked to edit it. Ordinary help does not update the tracker; save only a meaningful milestone, blocker, or decision, with reported/observed provenance.
 
-Hint request: `${ARGUMENTS:-No blocker or strength supplied; infer only from inspected project evidence, asking if ambiguous.}`
+Request: `${ARGUMENTS:-No details supplied; use the request context and ask only if help depth or blocker is unclear.}`

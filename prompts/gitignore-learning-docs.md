@@ -1,6 +1,6 @@
 ---
-description: Add the generated learning-workflow files to the Git repository's .gitignore safely
+description: Safely add generated learning-tracker paths to the repository .gitignore
 ---
-Load and follow the `pi-learning-workflow` skill, especially its **Ignore learning documents in Git** procedure.
+Load and follow the `pi-learning-workflow` skill, especially **Ignore generated tracker files**.
 
-Confirm that the current directory is inside a Git working tree. If it is not, make no changes and explain why. In the repository root, safely create or update `.gitignore` so the exact generated learning-workflow paths are ignored. Preserve all existing content and formatting, append only missing entries, avoid duplicate entries or marker comments on repeated invocation, and re-read the result before reporting it. Do not change any generated learning documents or Git configuration.
+Confirm the current directory is in a Git worktree and target its root `.gitignore`. Inspect existing rules and whether `AGENTS.md` is generated/owned by this workflow. Append only missing root-anchored entries for `/.learning/` and, only when appropriate, `/AGENTS.md`. Preserve unrelated content and deliberate version-control choices. Never untrack existing files; do not run `git add`. Re-read and report changes. If ownership or intent is ambiguous, ask before changing rules.

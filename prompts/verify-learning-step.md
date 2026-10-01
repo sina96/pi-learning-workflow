@@ -1,9 +1,9 @@
 ---
-description: Verify the current learning milestone safely and record evidence without fixing implementation
-argument-hint: "[milestone or whole-task]"
+description: Verify requested learning work, record evidence, and ask before closing
+argument-hint: "[milestone, criterion, or whole issue]"
 ---
-Load and follow the `pi-learning-workflow` skill, especially its **Verify a step** procedure.
+Load and follow the `pi-learning-workflow` skill, especially **Verify work**.
 
-Inspect the active workflow and learner implementation. Verify only the current milestone unless the arguments explicitly identify another milestone or whole-task verification. Run only relevant safe checks, use isolated data where appropriate, inspect exit status and meaningful output, and make no implementation changes. Report `passed`, `failed`, `partial`, or `blocked`; record completed evidence in `docs/progress.md`; give the smallest next action; never archive automatically.
+Verify the requested scope (default: current milestone). Run only safe relevant checks, inspect results, and make no implementation changes. Report passed, failed, partial, or blocked with commands/inspection, evidence, limitations, and the smallest next action. Record concise evidence in the relevant issue, accurately labelled for the inspected code state. A passing build does not prove unrelated criteria. Never close automatically; ask the learner before marking done, and leave gaps visible.
 
 Verification scope: `${ARGUMENTS:-current milestone}`

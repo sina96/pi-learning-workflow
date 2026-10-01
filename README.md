@@ -3,39 +3,37 @@
 [![CI](https://github.com/sina96/pi-learning-workflow/actions/workflows/ci.yml/badge.svg)](https://github.com/sina96/pi-learning-workflow/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/pi-learning-workflow?logo=npm)](https://www.npmjs.com/package/pi-learning-workflow)
 
-`pi-learning-workflow` is a reusable Pi package for hands-on coding-learning projects. It keeps one substantial task, progress, hints, verification evidence, and archives in version-controlled project files. The learner writes implementation; agents explain, review, diagnose, hint, verify, and maintain workflow documents unless explicitly asked to change code.
+A lightweight workflow for learning by **building and testing yourself**, with coaching and agent verification when you ask. The tracker supports that work; maintaining the tracker is not another task.
 
-The package contains no extension and executes no package code. It provides one Agent Skills-compatible skill and exactly six Pi prompt templates.
+The learner owns implementation. Agents can give hints, explanations, detailed walkthroughs, review, and verification on demand. A walkthrough is not permission to edit code. Verification records evidence and asks before closing work.
+
+This is a Pi package with one Agent Skills-compatible skill and six prompt templates. It includes **no executable extension** and does not run package code.
+
+## What the workflow feels like
+
+- Returning to a project does not trigger automatic recaps, inspection, tests, or file changes. Ask to resume for a concise recap of recorded state, distinguished from fresh inspection.
+- “Save this idea” captures a concise backlog item without changing focus.
+- “Let's work on this” clarifies the outcome, acceptance criteria, learning focus, and a few light milestones.
+- Asking for help gets the requested depth. If unclear, the agent asks whether you want a hint, explanation, or walkthrough.
+- Meaningful milestones, blockers, and decisions may be recorded. Ordinary help is not a diary.
+- Verification reports evidence and limitations, updates the issue, and asks before closure. It never silently fixes your implementation.
+- Switching from unfinished work requires a choice: pause and switch, or queue the new issue and keep focus. Nothing is archived just to start something else.
 
 ## Generated layout
 
-`/new-learning-project` creates this layout only when doing so is safe:
-
 ```text
 AGENTS.md
-docs/
-├── current_task.md
-├── progress.md
-├── hints.md
-├── verify.md
-├── manifesto.md
-└── done/
-    └── .gitkeep
+.learning/
+├── index.md             # links and current focus pointer
+├── goals/               # optional larger outcomes
+└── issues/
+    ├── T001.md          # one concise file per issue
+    └── T002.md
 ```
 
-The non-Markdown `.gitkeep` preserves an empty `docs/done/` in Git.
-
-- `docs/current_task.md`: authoritative scope, requirements, acceptance criteria, and milestones for one coherent active task.
-- `docs/progress.md`: current state, next action, decisions, blockers, learning notes, verification history, and archive history.
-- `docs/hints.md`: non-duplicative, progressively stronger milestone guidance.
-- `docs/verify.md`: reproducible milestone and whole-task checks.
-- `docs/manifesto.md`: concise learner discipline.
-- `docs/done/`: preserved task history with accurate status.
-- `AGENTS.md`: automatically loaded project behavior and permission boundaries.
+Optional saved learning notes are linked only when useful. The index does not duplicate issue details; the issue file owns its scope, status, meaningful current note, and latest relevant evidence. A standalone issue does not need a goal. Statuses are `backlog`, `ready`, `active`, `paused`, `blocked`, `done`, and `cancelled`. `done` requires your confirmation and does not imply every criterion was verified.
 
 ## Install
-
-The package is [published on npm](https://www.npmjs.com/package/pi-learning-workflow) and can be installed directly with Pi:
 
 ```bash
 # npm package, global Pi settings
@@ -44,109 +42,58 @@ pi install npm:pi-learning-workflow
 # npm package, project-local Pi settings
 pi install -l npm:pi-learning-workflow
 
-# Local path, global Pi settings
+# Local path, global or project-local settings
 pi install /absolute/path/to/pi-learning-workflow
-
-# Local path, project-local Pi settings
 pi install -l /absolute/path/to/pi-learning-workflow
 
-# Git source, global
+# Git source, global or project-local settings
 pi install git:github.com/sina96/pi-learning-workflow
-
-# Git source, project-local
 pi install -l git:github.com/sina96/pi-learning-workflow
 ```
 
-A project-local install writes `.pi/settings.json`. Pi asks for project trust before loading project settings and resources; trust is an input-loading guard, not a sandbox. Context files such as generated `AGENTS.md` load regardless of project trust unless context loading is disabled. Installed skills can direct an agent to use filesystem and shell tools with the user's permissions, so inspect this repository and use OS/container isolation for untrusted work.
-
-Restart Pi or run `/reload` after installation or resource changes.
+A project-local install writes `.pi/settings.json`. Pi asks for project trust before loading project settings and resources; trust is an input-loading guard, not a sandbox. Context files such as `AGENTS.md` may load regardless of project trust. Review package instructions and use OS/container isolation for untrusted work. Restart Pi or run `/reload` after installation or resource changes.
 
 ## Commands
 
 ```text
 /new-learning-project Go "build a URL shortener CLI"
-/add-new-learning-task Rust "build a parser with property tests"
-/give-learning-hint "I am blocked on tokenization; weak hint"
+/add-new-learning-task "save idea: add playlist support"
+/add-new-learning-task "let's work on playlist support"
+/give-learning-hint "I'm stuck parsing URLs; hint"
 /verify-learning-step "milestone 2"
-/archive-learning-task "parser-foundations"
+/archive-learning-task T001
 /gitignore-learning-docs
 ```
 
-### `/new-learning-project [details]`
+- `/new-learning-project`: create a minimal tracker only when safe. Existing workflows trigger a migration proposal, not competing files.
+- `/add-new-learning-task`: capture ideas or clarify and start work. It never forces archival.
+- `/give-learning-hint`: provide requested-depth help; ordinary coaching does not save hint text.
+- `/verify-learning-step`: verify requested scope, record concise evidence, and ask before closure.
+- `/archive-learning-task`: optional history housekeeping only; not closure and not required to start work.
+- `/gitignore-learning-docs`: offer safe, append-only ignore rules for `.learning/` and workflow-owned `AGENTS.md` where appropriate.
 
-Inspects before writing, asks only essential questions, scaffolds project-specific workflow documents without implementation, detects repeated use, and proposes safe mappings for legacy files rather than overwriting them.
+Commands are shortcuts; natural-language requests work too. The skill may load automatically when a relevant request is made, or be forced with `/skill:pi-learning-workflow`.
 
-### `/add-new-learning-task [details]`
+## Existing projects and migration
 
-Creates a substantial task only when no task is active or after the old task is safely archived. Parts remain milestones in one file. It never overwrites an active task or creates implementation.
+Installation or initialization does not authorize migration. The agent inspects the old workflow read-only, proposes exact mappings and unresolved conflicts, and waits for approval. Migration preserves originals, does not assume old checkboxes mean verified, keeps completed history linked instead of creating a ticket per phase, validates the new tracker before activating it, and provides rollback guidance. Existing `AGENTS.md` instructions and `.gitignore` content are preserved; tracked files are never silently untracked. See `skills/pi-learning-workflow/references/migration.md`.
 
-### `/give-learning-hint [blocker or strength]`
+For example, a project with `PLAN.md`, `PROGRESS.md`, and `LEARNING.md` can keep those files as reference. Only selected unfinished outcomes become concise issues; the learner chooses focus. Conflicting or unclear statuses remain unresolved until clarified or separately verified.
 
-Inspects the current milestone and relevant learner code, gives the smallest useful hint, and refines the milestone's existing hint section without duplicating it.
+## Limitations and safety
 
-### `/verify-learning-step [milestone or whole-task]`
-
-Runs only relevant safe checks, uses isolated state where appropriate, records evidence and status, and does not edit implementation or archive the task.
-
-### `/archive-learning-task [slug or note]`
-
-Evaluates completion and verification separately, preserves the task under a unique dated filename, and leaves a deliberate no-active-task state. Missing or failed evidence requires informed confirmation before an accurately labeled early archive.
-
-### `/gitignore-learning-docs`
-
-When run inside a Git worktree, creates or updates the repository-root `.gitignore` with root-anchored entries for `AGENTS.md` and the generated workflow files under `docs/`. It preserves existing ignore rules, adds only missing entries, is idempotent, and does not untrack files that are already in Git. Outside a Git worktree it makes no changes.
-
-The skill may also load automatically when Pi identifies initialization, coaching, hinting, verification, Git-ignore setup, archival, or next-task preparation in a repository using this layout. It can be forced with `/skill:pi-learning-workflow`.
-
-## State and safety model
-
-These states are independent:
-
-1. **Implementation-complete**: required acceptance criteria appear satisfied after inspection.
-2. **Verified**: applicable checks passed and evidence is recorded in `docs/progress.md`.
-3. **Archived**: history was preserved under `docs/done/` after an explicit request or informed confirmation.
-
-Archived does not mean completed. For incomplete, failed, unverified, or ambiguous work, the agent must explain the missing evidence, recommend verification where appropriate, and ask whether the user knowingly wants an archive with that exact status. Declining leaves workflow files unchanged. Approval preserves requirements, unfinished milestones, blockers, failed checks, evidence, and the smallest next action.
-
-All operations inspect before writing, avoid deletion and silent overwrite, preserve unique archive names with deterministic numeric suffixes, and refuse to create a replacement task if required archival fails. Verification never grants permission to alter learner implementation.
-
-## Existing workflows and migration
-
-Legacy sources may include:
-
-```text
-EXERCISE.md  or MISSION.md  -> docs/current_task.md
-PROGRESS.md                 -> docs/progress.md
-hints.md                    -> docs/hints.md
-VERIFY.md                   -> docs/verify.md
-```
-
-This is only a proposed mapping, not an automatic move. The agent must inspect exact content and conflicts, show the proposed mapping, preserve exact requirements, obtain approval, verify the migrated result, and retain originals unless their later removal is explicitly authorized. Existing target files are never silently replaced.
-
-## Resource collisions
-
-Pi derives prompt command names from filenames. Prompt and skill names can collide with resources from another location or package. Pi reports collision diagnostics and keeps the first discovered resource; for skills, the documented behavior is likewise to warn and keep the first. No generic aliases are included here.
-
-Inspect startup diagnostics and the loaded resource summary, run `pi list` to inspect installed packages, or use `pi config` (`pi config -l` for project overrides) to enable/disable individual package skills and prompts. Package settings filters can narrow resources. If one of these six command names or `pi-learning-workflow` conflicts, disable the conflicting resource or package rather than assuming which copy loaded.
+This package uses prompts and instructions rather than deterministic state-management code. Behavior depends on the agent following the skill. Review changes, keep version-control checkpoints, and do not treat project trust as a security boundary. The package does not guarantee safe shell behavior or model compliance.
 
 ## Disable or uninstall
 
-Use `pi config` or `pi config -l` to disable this package's skill or individual prompts without uninstalling. Remove the same source and scope used for installation:
+Use `pi config` (or `pi config -l` for project settings) to disable resources, or remove the same source and scope used to install:
 
 ```bash
-pi remove /absolute/path/to/pi-learning-workflow
-pi remove -l /absolute/path/to/pi-learning-workflow
-pi remove git:github.com/sina96/pi-learning-workflow
-pi remove -l git:github.com/sina96/pi-learning-workflow
+pi remove npm:pi-learning-workflow
+pi remove -l npm:pi-learning-workflow
 ```
 
-Then run `/reload` or restart Pi. Removing the package does not delete generated project workflow files.
-
-## Portability and limitations
-
-Pi package installation, the explicit `pi` manifest, and slash prompt templates are Pi-specific. Agents that do not support Pi packages will not discover these six commands. The skill follows the Agent Skills structure where practical, but behavior still depends on the compatible harness loading and following it.
-
-Generated `AGENTS.md` and ordinary Markdown workflow files remain partially portable to agents that understand those files. No workflow can technically guarantee model compliance, safe shell behavior, or idempotency by itself; review proposed changes and keep version-control checkpoints.
+Removing the package does not delete project tracker files.
 
 ## License
 
