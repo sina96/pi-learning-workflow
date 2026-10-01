@@ -1,9 +1,11 @@
 ---
-description: Add one substantial learning task without overwriting or prematurely discarding the active task
-argument-hint: "[goal, language, requirements, or constraints]"
+description: Capture an idea or prepare an issue to start, without losing current work
+argument-hint: "[idea, goal, or request to start work]"
 ---
-Load and follow the `pi-learning-workflow` skill, especially its **Add a new task** procedure and shared completion/verification check.
+Load and follow the `pi-learning-workflow` skill, especially **Capture or start an issue**.
 
-Safely define the requested task in the current learning project. Keep one coherent goal and all requested parts as milestones in `docs/current_task.md`. Never overwrite an active task. When an active task is incomplete, unverified, failed, or ambiguous, you MUST end with one focused informed-confirmation question asking whether to archive it with the exact applicable status and then create the requested task; recommending completion first is not a substitute for asking. Until the user answers yes, change no workflow files. If prerequisite archival is declined or unsuccessful, do not create the new task. Do not generate implementation code.
+Interpret “save/capture this idea” as a concise backlog issue; do not demand criteria or change focus. Interpret “let's work on/start this” as a request to clarify outcome, acceptance criteria, learning focus, and a few light milestones before starting. If intent is unclear, ask one focused question.
 
-Requested task: `${ARGUMENTS:-Not supplied; inspect the workflow and ask for essential task details.}`
+If another issue is focused and unfinished, ask whether to pause it and switch or queue this issue and keep focus. Do not change focus until the learner chooses. Preserve unfinished work. Never require archival before starting.
+
+Request: `${ARGUMENTS:-Not supplied; ask whether the user wants to capture an idea or start work.}`

@@ -1,9 +1,9 @@
 ---
-description: Safely archive the active task with separate completion and verification status
-argument-hint: "[custom slug or archival note]"
+description: Optionally preserve an issue as history; archival is not closure or a prerequisite
+argument-hint: "[issue ID or note]"
 ---
-Load and follow the `pi-learning-workflow` skill, especially its **Archive a task** procedure and shared completion/verification check.
+Load and follow the `pi-learning-workflow` skill, especially **Optional archive command**.
 
-Inspect workflow files, implementation, and evidence. Determine implementation-complete and verified separately. This invocation is an explicit archive request only when the active task and state are unambiguous. If completion or verification is missing, failed, or uncertain, explain exactly why, recommend `/verify-learning-step`, and obtain informed confirmation naming the archive's incomplete/unverified/failed status before changing files. Never overwrite history, equate archived with completed, or create a new task automatically.
+Archiving is optional housekeeping, not a way to close an issue and never required before starting other work. Prefer retaining the issue file and marking status when that is sufficient. If a move/copy is useful, show the destination and ask before writing; use a unique path, preserve the original unless explicit removal approval is given, and retain status/evidence qualifications. Do not archive automatically.
 
-Optional sanitized slug or note: `${ARGUMENTS:-none}`
+Issue or note: `${ARGUMENTS:-identify the requested issue and propose a safe destination.}`

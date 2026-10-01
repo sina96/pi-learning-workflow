@@ -1,6 +1,6 @@
 {
   "name": "pi-learning-workflow",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A file-backed, learner-owned coding-learning workflow for Pi and Agent Skills-compatible agents.",
   "license": "MIT",
   "author": {

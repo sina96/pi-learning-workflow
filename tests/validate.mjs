@@ -45,6 +45,9 @@ for (const resource of [...pkg.pi.skills, ...pkg.pi.prompts]) {
   await access(path.join(root, resource));
 }
 
+const migration = path.join(root, "skills/pi-learning-workflow/references/migration.md");
+await access(migration);
+
 const skill = await readFile(path.join(root, pkg.pi.skills[0]), "utf8");
 const frontmatter = skill.match(/^---\n([\s\S]*?)\n---\n/);
 assert.ok(frontmatter, "SKILL.md needs YAML frontmatter");
